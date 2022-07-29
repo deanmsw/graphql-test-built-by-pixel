@@ -1,0 +1,26 @@
+org: pixel
+app: ask-any-task-api
+service: ask-any-task-api
+frameworkVersion: '2 || 3'
+plugins:
+    - serverless-dotenv-plugin
+    - serverless-offline
+provider:
+    name: aws
+    runtime: nodejs12.x
+    lambdaHashingVersion: '20201221'
+    region: eu-west-2
+
+functions:
+    api:
+        handler: handler.handler
+        events:
+            - httpApi: '*'
+    graphql:
+        # this is formatted as <FILENAME>.<HANDLER>
+        handler: graphql.graphqlHandler
+        events:
+            - http:
+                  path: /
+                  method: post
+                  cors: true
