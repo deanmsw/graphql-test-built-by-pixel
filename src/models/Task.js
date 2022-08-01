@@ -14,6 +14,11 @@ const ModelSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null
+    },
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
     },
@@ -86,5 +91,19 @@ ModelSchema.set("toObject", { getters: true });
 const Task = mongoose.model("Task", ModelSchema);
 
 const TaskTC = composeMongoose(Task, {});
+
+TaskTC.addRelation('category', {
+    resolver: () => TaskTC.mongooseResolvers.findMany(),
+    prepareArgs: {
+        filter: (source) => ({
+            _operators: {
+                _id: {
+                    in: source.category || [],
+                },
+            },
+        }),
+    },
+    projection: { category: true },
+});
 
 module.exports = { TaskTC, Task };

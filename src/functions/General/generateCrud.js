@@ -38,6 +38,11 @@ const generateMutations = (config) => {
             .createOne()
             .withMiddlewares(config.create.auth ? [authMiddleware] : []);
     }
+    if (config.delete) {
+        obj[`${config.name}Delete`] = config.TC.mongooseResolvers
+            .removeById()
+            .withMiddlewares(config.create.auth ? [authMiddleware] : []);
+    }
     return obj;
 };
 
