@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const timestamps = require("mongoose-timestamp");
 const { composeMongoose } = require("graphql-compose-mongoose");
+const { TaskTC, Task } = require("./Task");
 
 const { Schema } = mongoose;
 
@@ -16,9 +17,9 @@ const ModelSchema = new Schema(
       },
       category_tasks: [{
           type: mongoose.Schema.Types.ObjectId,
-          ref: "CategoryTasks",
-          default: null,
-      }]
+          ref: "CategoryTasks"
+      }],
+      tasks: {type: [Task]}
     },
   {
     collection: "categories",

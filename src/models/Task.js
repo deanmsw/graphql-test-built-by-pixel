@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const timestamps = require("mongoose-timestamp");
 const { composeMongoose } = require("graphql-compose-mongoose");
+const { CategoryTC, Category } = require("./Category");
 
 const { Schema } = mongoose;
 
@@ -15,9 +16,17 @@ const ModelSchema = new Schema(
       default: true,
     },
     category: {
+      title: {
+        type: String
+      },
+      color: {
+        type: String
+      },
+       category_Id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "CategoryId",
       default: null
+    },
     },
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -93,7 +102,7 @@ const Task = mongoose.model("Task", ModelSchema);
 const TaskTC = composeMongoose(Task, {});
 
 TaskTC.addRelation('category', {
-    resolver: () => TaskTC.mongooseResolvers.findMany(),
+    resolver: () => CategoryTC.mongooseResolvers.findOne(),
     prepareArgs: {
         filter: (source) => ({
             _operators: {
